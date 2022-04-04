@@ -4,45 +4,62 @@ using System.Linq;
 
 namespace FirstTask
 {
+    /// <summary>
+    /// Class represents hexagon
+    /// </summary>
     public class Hexagon : Polygon
     {
         private Random random = new Random();
+        private Point [] points { get; set; }
+        /// <summary>
+        /// Calculates the area of hexagon
+        /// </summary>
+        /// <param name="points">Count of points</param>
+        /// <returns>Returns the area of hexagon</returns>
         public override double GetArea(Point[] points)
         {
-            int[,] coordinates = new int[2, points.Length];
-            for (int i = 0; i < points.Length; i++)
+            var firstResult = 0d;
+            int i = 0;
+            for (; i < points.Length - 1; i++)
             {
-                coordinates[0, i] = points[i].X;
-                coordinates[1, i] = points[i].Y;
+                firstResult += (points[i].X * points[i + 1].Y);
             }
-            int x1, x2, x3, y1, y2, y3;
-            double p, a, b, c, s = 0;
-            x1 = coordinates[0, 0];
-            y1 = coordinates[1, 0];
-            for (int i = 1; i < coordinates.GetLength(1) - 1; i++)
+            firstResult += (points[i].X * points[0].Y);
+            var secondResult = 0d;
+            i = 0;
+            for (; i < points.Length - 1; i++)
             {
-                x2 = coordinates[0, i];
-                y2 = coordinates[1, i];
-                x3 = coordinates[0, i + 1];
-                y3 = coordinates[1, i + 1];
-                a = Math.Sqrt(((x3 - x2) * (x3 - x2)) + ((y3 - y2) * (y3 - y2)));
-                b = Math.Sqrt(((x3 - x1) * (x3 - x1)) + ((y3 - y1) * (y3 - y1)));
-                c = Math.Sqrt(((x2 - x1) * (x2 - x1)) + ((y2 - y1) * (y2 - y1)));
-                p = (a + b + c) / 2;
-                s += Math.Sqrt(p * (p - a) * (p - b) * (p - c));
+                secondResult += (points[i + 1].X * points[i].Y);
             }
-            return s;
+
+            secondResult += (points[0].X * points[i].Y);
+            double area = (double)(firstResult - secondResult) / 2;
+            if (area < 0)
+            { 
+                return -1 * area;
+            }
+            else
+            { 
+                return area;
+            }
         }
+
+        /// <summary>
+        /// Generates random coordinates for hexagon
+        /// </summary>
+        /// <returns>Returns array with random points</returns>
         public Point[] GetRandomCoordinatesForHexagon()
         {
-            Point[] points = new Point[6];
+            points = new Point[6];
             for (int i = 0; i < points.Length; i++)
             {
-                if (i < 3)
+                var randomPoint = new Point();
+                randomPoint.X = random.GetRandom().X;
+                randomPoint.Y = random.GetRandom().Y;
+                if (i < 3 && !points.Contains(randomPoint))
                 {
-                    points[i].X = random.GetRandom().X;
-                    points[i].Y = random.GetRandom().Y;
-                    Console.WriteLine($"{points[i].X}, {points[i].Y}");
+                    points[i].X = randomPoint.X;
+                    points[i].Y = randomPoint.Y;
                 }
                 else if (i == 3)
                 {
@@ -52,12 +69,11 @@ namespace FirstTask
                     {
                         point.X = random.GetRandom().X;
                         point.Y = random.GetRandom().Y;
-                        isSuccess = checkIntersectionOfTwoLineSegments(points[0], points[1], points[2], point);
-                        if (!isSuccess && !points.Contains(point))
+                        if (!points.Contains(point) 
+                            && !LineIntersectionCheck(points[0], points[1], points[2], point))
                         {
                             points[i].X = point.X;
                             points[i].Y = point.Y;
-                            Console.WriteLine($"{points[i].X}, {points[i].Y}");
                             isSuccess = true;
                         }
                         else
@@ -72,12 +88,12 @@ namespace FirstTask
                     {
                         point.X = random.GetRandom().X;
                         point.Y = random.GetRandom().Y;
-                        isSuccess = checkIntersectionOfTwoLineSegments(points[0], points[1], points[3], point);
-                        if (!isSuccess && !checkIntersectionOfTwoLineSegments(points[1], points[2], points[3], point) && !points.Contains(point))
+                        if (!points.Contains(point)
+                            && !LineIntersectionCheck(points[0], points[1], points[3], point) 
+                            && !LineIntersectionCheck(points[1], points[2], points[3], point))
                         {
                             points[i].X = point.X;
                             points[i].Y = point.Y;
-                            Console.WriteLine($"{points[i].X}, {points[i].Y}");
                             isSuccess = true;
                         }
                         else
@@ -92,17 +108,16 @@ namespace FirstTask
                     {
                         point.X = random.GetRandom().X;
                         point.Y = random.GetRandom().Y;
-                        isSuccess = checkIntersectionOfTwoLineSegments(points[0], points[1], points[4], point);
-                        if (!points.Contains(point) && !isSuccess
-                            && !checkIntersectionOfTwoLineSegments(points[1], points[2], points[4], point)
-                            && !checkIntersectionOfTwoLineSegments(points[2], points[3], points[4], point)
-                            && !checkIntersectionOfTwoLineSegments(points[1], points[2], points[0], point)
-                              && !checkIntersectionOfTwoLineSegments(points[2], points[3], points[0], point)
-                              && !checkIntersectionOfTwoLineSegments(points[3], points[4], points[0], point))
+                        if (!points.Contains(point) 
+                            && !LineIntersectionCheck(points[0], points[1], points[4], point)
+                            && !LineIntersectionCheck(points[1], points[2], points[4], point)
+                            && !LineIntersectionCheck(points[2], points[3], points[4], point)
+                            && !LineIntersectionCheck(points[1], points[2], points[0], point)
+                            && !LineIntersectionCheck(points[2], points[3], points[0], point)
+                            && !LineIntersectionCheck(points[3], points[4], points[0], point))
                         {
                             points[i].X = point.X;
                             points[i].Y = point.Y;
-                            Console.WriteLine($"{points[i].X}, {points[i].Y}");
                             isSuccess = true;
                         }
 
@@ -114,36 +129,36 @@ namespace FirstTask
             return points;
         }
 
-        //метод, проверяющий пересекаются ли 2 отрезка [p1, p2] и [p3, p4]
-        private bool checkIntersectionOfTwoLineSegments(Point firstPointFirstSegment, Point secondPointFirstSegment, Point firstPointSecondSegment, Point secondPointSecondSegment)
+        /// <summary>
+        /// Checks segments for intersections
+        /// </summary>
+        /// <param name="firstPointFirstSegment">First point of first segment</param>
+        /// <param name="secondPointFirstSegment">Second point of first segment</param>
+        /// <param name="firstPointSecondSegment">First point of second segment</param>
+        /// <param name="secondPointSecondSegment">Second point of second segment</param>
+        /// <returns>Returns a value based on the presence of an intersection</returns>
+        private bool LineIntersectionCheck(Point firstPointFirstSegment, Point secondPointFirstSegment, Point firstPointSecondSegment, Point secondPointSecondSegment)
         {
-            //сначала расставим точки по порядку, т.е. чтобы было p1.x <= p2.x
-            if (secondPointFirstSegment.X < firstPointFirstSegment.Y)
+            if (secondPointFirstSegment.X < firstPointFirstSegment.X)
             {
                 Point tmp = firstPointFirstSegment;
                 firstPointFirstSegment = secondPointFirstSegment;
                 secondPointFirstSegment = tmp;
             }
-            //и p3.x <= p4.x
             if (secondPointSecondSegment.X < firstPointSecondSegment.X)
             {
                 Point tmp = firstPointSecondSegment;
                 firstPointSecondSegment = secondPointSecondSegment;
                 secondPointSecondSegment = tmp;
             }
-            //проверим существование потенциального интервала для точки пересечения отрезков
             if (secondPointFirstSegment.X < firstPointSecondSegment.X)
             {
-                return false; //ибо у отрезков нету взаимной абсциссы
+                return false;
             }
-            //если оба отрезка вертикальные
             if ((firstPointFirstSegment.X - secondPointFirstSegment.X == 0) && (firstPointSecondSegment.X - secondPointSecondSegment.X == 0))
             {
-                //если они лежат на одном X
                 if (firstPointFirstSegment.X == firstPointSecondSegment.X)
                 {
-                    //проверим пересекаются ли они, т.е. есть ли у них общий Y
-                    //для этого возьмём отрицание от случая, когда они НЕ пересекаются
                     if (!((Math.Max(firstPointFirstSegment.Y, secondPointFirstSegment.Y) < Math.Min(firstPointSecondSegment.Y, secondPointSecondSegment.Y)) || (Math.Min(firstPointFirstSegment.Y, secondPointFirstSegment.Y) > Math.Max(firstPointSecondSegment.Y, secondPointSecondSegment.Y))))
                     {
                         return true;
@@ -151,14 +166,8 @@ namespace FirstTask
                 }
                 return false;
             }
-            //найдём коэффициенты уравнений, содержащих отрезки
-            //f1(x) = A1*x + b1 = y
-            //f2(x) = A2*x + b2 = y
-
-            //если первый отрезок вертикальный
             if (firstPointFirstSegment.X - secondPointFirstSegment.X == 0)
             {
-                //найдём Xa, Ya - точки пересечения двух прямых
                 double firstPointFirstSegmentX = firstPointFirstSegment.X;
                 double firstAFirstVertical = ((double)(firstPointSecondSegment.Y - secondPointSecondSegment.Y)) / (firstPointSecondSegment.X - secondPointSecondSegment.X);
                 double secondBFirstVertical = firstPointSecondSegment.Y - (firstAFirstVertical * firstPointSecondSegment.X);
@@ -169,10 +178,8 @@ namespace FirstTask
                 }
                 return false;
             }
-            //если второй отрезок вертикальный
             if (firstPointSecondSegment.X - secondPointSecondSegment.X == 0)
             {
-                //найдём Xa, Ya - точки пересечения двух прямых
                 double firstPointSecondSegmentX = firstPointSecondSegment.X;
                 double firstASecondVertical = ((double)(firstPointFirstSegment.Y - secondPointFirstSegment.Y)) / (firstPointFirstSegment.X - secondPointFirstSegment.X);
                 double firstBSecondVertical = firstPointFirstSegment.Y - (firstASecondVertical * firstPointFirstSegment.X);
@@ -185,20 +192,18 @@ namespace FirstTask
                 }
                 return false;
             }
-            //оба отрезка невертикальные
             double firstA = Math.Round(((double)(firstPointFirstSegment.Y - secondPointFirstSegment.Y)) / (firstPointFirstSegment.X - secondPointFirstSegment.X), 2);
             double secondA = Math.Round(((double)(firstPointSecondSegment.Y - secondPointSecondSegment.Y)) / (firstPointSecondSegment.X - secondPointSecondSegment.X), 2);
             double firstB = firstPointFirstSegment.Y - (firstA * firstPointFirstSegment.X);
             double secondB = firstPointSecondSegment.Y - (secondA * firstPointSecondSegment.X);
             if (firstA == secondA)
             {
-                return false; //отрезки параллельны
+                return false;
             }
-            //Xa - абсцисса точки пересечения двух прямых
             double Xa = ((double)(secondB - firstB)) / (firstA - secondA);
             if ((Xa < Math.Max(firstPointFirstSegment.X, firstPointSecondSegment.X)) || (Xa > Math.Min(secondPointFirstSegment.X, secondPointSecondSegment.X)))
             {
-                return false; //точка Xa находится вне пересечения проекций отрезков на ось X 
+                return false;
             }
             else
             {
@@ -206,21 +211,34 @@ namespace FirstTask
             }
         }
 
+        /// <summary>
+        /// Compares two values
+        /// </summary>
+        /// <param name="obj">Compared value</param>
+        /// <returns>Returns true, if values are the same and false if values are different</returns>
         public override bool Equals(object obj)
         {
             return obj is Hexagon hexagon &&
                    Id == hexagon.Id &&
-                   EqualityComparer<Segment[]>.Default.Equals(Segment, hexagon.Segment);
+                   EqualityComparer<Segment[]>.Default.Equals(Segments, hexagon.Segments);
         }
 
+        /// <summary>
+        /// Gets hash code of value
+        /// </summary>
+        /// <returns>Returns Hash Code of value</returns>
         public override int GetHashCode()
         {
-            return HashCode.Combine(Id, Segment);
+            return HashCode.Combine(Id, Segments);
         }
 
-        //public override string ToString()
-        //{
-        //    return base.ToString();
-        //}
+        /// <summary>
+        /// Converts the value as a string
+        /// </summary>
+        /// <returns>Returns converted value</returns>
+        public override string ToString()
+        {
+            return String.Format($"Name: {nameof(Hexagon)}, Area: {GetArea(points)}, Perimeter: {GetPerimeter(points)}");
+        }
     }
 }

@@ -1,5 +1,8 @@
 ﻿namespace FirstTask
 {
+    /// <summary>
+    /// Class represents point
+    /// </summary>
     public struct Point
     {
         public int X { get; set; }
