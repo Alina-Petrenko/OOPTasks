@@ -231,6 +231,8 @@ namespace FirstTask
         /// <returns>Returns Hash Code of value</returns>
         public override int GetHashCode()
         {
+            // TODO: it`s bad implementation of GetHashCode(). It could be collisions.
+            // TODO: good solution will be implement GetHashCode() in "Segment", and then call it for each segment in "Segments"
             return HashCode.Combine(Id, Segments);
         }
 
