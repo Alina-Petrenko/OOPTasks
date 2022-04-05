@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace FirstTask
 {
@@ -9,53 +10,50 @@ namespace FirstTask
     /// </summary>
     public class Hexagon : Polygon
     {
-        private Random random = new Random();
-        private Point [] points { get; set; }
+        public Hexagon(Point[] points, int Id)
+        {
+            if (points.Length != 6)
+            {
+                throw new InvalidOperationException("");
+            }
+
+            this.Segments = new Segment[6];
+            for (var i = 0; i < points.Length - 1; i++)
+            {
+                this.Segments[i] = new Segment(points[i], points[i + 1]);
+            }
+
+            this.Segments[points.Length - 1] = new Segment(points[^1], points[0]);
+            this.Id = Id;
+        }
+
         /// <summary>
         /// Calculates the area of hexagon
         /// </summary>
-        /// <param name="points">Count of points</param>
         /// <returns>Returns the area of hexagon</returns>
-        public override double GetArea(Point[] points)
+        public override double GetArea()
         {
-            var firstResult = 0d;
-            int i = 0;
-            for (; i < points.Length - 1; i++)
+            double sum = 0;
+            for (var iterator = 0; iterator < this.Segments.Length; iterator++)
             {
-                firstResult += (points[i].X * points[i + 1].Y);
+                sum += (this.Segments[iterator].FirstPoint.X + this.Segments[iterator].SecondPoint.X) *
+                       (this.Segments[iterator].FirstPoint.Y - this.Segments[iterator].SecondPoint.Y);
             }
-            firstResult += (points[i].X * points[0].Y);
-            var secondResult = 0d;
-            i = 0;
-            for (; i < points.Length - 1; i++)
-            {
-                secondResult += (points[i + 1].X * points[i].Y);
-            }
-
-            secondResult += (points[0].X * points[i].Y);
-            double area = (double)(firstResult - secondResult) / 2;
-            if (area < 0)
-            { 
-                return -1 * area;
-            }
-            else
-            { 
-                return area;
-            }
+            return (double)(0.5f * Math.Abs(sum));
         }
 
         /// <summary>
         /// Generates random coordinates for hexagon
         /// </summary>
         /// <returns>Returns array with random points</returns>
-        public Point[] GetRandomCoordinatesForHexagon()
+        public static Point[] GetRandomCoordinatesForHexagon()
         {
-            points = new Point[6];
+            var random = new Random();
+            Point[] points = new Point[6];
             for (int i = 0; i < points.Length; i++)
             {
-                var randomPoint = new Point();
-                randomPoint.X = random.GetRandom().X;
-                randomPoint.Y = random.GetRandom().Y;
+                var randomTuple = random.GetRandomPoint();
+                var randomPoint = new Point(randomTuple.X, randomTuple.Y);
                 if (i < 3 && !points.Contains(randomPoint))
                 {
                     points[i].X = randomPoint.X;
@@ -67,9 +65,9 @@ namespace FirstTask
                     var isSuccess = false;
                     while (!isSuccess)
                     {
-                        point.X = random.GetRandom().X;
-                        point.Y = random.GetRandom().Y;
-                        if (!points.Contains(point) 
+                        point.X = random.GetRandomPoint().X;
+                        point.Y = random.GetRandomPoint().Y;
+                        if (!points.Contains(point)
                             && !LineIntersectionCheck(points[0], points[1], points[2], point))
                         {
                             points[i].X = point.X;
@@ -86,10 +84,10 @@ namespace FirstTask
                     var isSuccess = false;
                     while (!isSuccess)
                     {
-                        point.X = random.GetRandom().X;
-                        point.Y = random.GetRandom().Y;
+                        point.X = random.GetRandomPoint().X;
+                        point.Y = random.GetRandomPoint().Y;
                         if (!points.Contains(point)
-                            && !LineIntersectionCheck(points[0], points[1], points[3], point) 
+                            && !LineIntersectionCheck(points[0], points[1], points[3], point)
                             && !LineIntersectionCheck(points[1], points[2], points[3], point))
                         {
                             points[i].X = point.X;
@@ -106,9 +104,9 @@ namespace FirstTask
                     var isSuccess = false;
                     while (!isSuccess)
                     {
-                        point.X = random.GetRandom().X;
-                        point.Y = random.GetRandom().Y;
-                        if (!points.Contains(point) 
+                        point.X = random.GetRandomPoint().X;
+                        point.Y = random.GetRandomPoint().Y;
+                        if (!points.Contains(point)
                             && !LineIntersectionCheck(points[0], points[1], points[4], point)
                             && !LineIntersectionCheck(points[1], points[2], points[4], point)
                             && !LineIntersectionCheck(points[2], points[3], points[4], point)
@@ -137,7 +135,7 @@ namespace FirstTask
         /// <param name="firstPointSecondSegment">First point of second segment</param>
         /// <param name="secondPointSecondSegment">Second point of second segment</param>
         /// <returns>Returns a value based on the presence of an intersection</returns>
-        private bool LineIntersectionCheck(Point firstPointFirstSegment, Point secondPointFirstSegment, Point firstPointSecondSegment, Point secondPointSecondSegment)
+        private static bool LineIntersectionCheck(Point firstPointFirstSegment, Point secondPointFirstSegment, Point firstPointSecondSegment, Point secondPointSecondSegment)
         {
             if (secondPointFirstSegment.X < firstPointFirstSegment.X)
             {
@@ -220,7 +218,7 @@ namespace FirstTask
         {
             return obj is Hexagon hexagon &&
                    Id == hexagon.Id &&
-                   EqualityComparer<Segment[]>.Default.Equals(Segments, hexagon.Segments);
+                   Segments.SequenceEqual(hexagon.Segments);
         }
 
         /// <summary>
@@ -229,6 +227,11 @@ namespace FirstTask
         /// <returns>Returns Hash Code of value</returns>
         public override int GetHashCode()
         {
+            int hash = 0;
+            foreach (var segments in Segments)
+            {
+                hash ^= segments.GetHashCode();
+            }
             return HashCode.Combine(Id, Segments);
         }
 
@@ -238,7 +241,13 @@ namespace FirstTask
         /// <returns>Returns converted value</returns>
         public override string ToString()
         {
-            return String.Format($"Name: {nameof(Hexagon)}, Area: {GetArea(points)}, Perimeter: {GetPerimeter(points)}");
+            var stringBuilder = new StringBuilder();
+            stringBuilder.AppendLine($"Name: {nameof(Hexagon)}");
+            for (int i = 0; i < this.Segments.Length; i++)
+            {
+                stringBuilder.AppendLine($"Point #{i + 1}: X = {this.Segments[i].FirstPoint.X}, Y = {this.Segments[i].FirstPoint.Y}.");
+            }
+            return stringBuilder.ToString();
         }
     }
 }

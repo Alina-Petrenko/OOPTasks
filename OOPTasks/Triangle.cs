@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace FirstTask
 {
@@ -9,17 +10,26 @@ namespace FirstTask
     /// </summary>
     public class Triangle : Polygon
     {
-        private Random random = new Random();
-        private Point[] points { get; set;} 
+        public Triangle(Point[] points, int Id)
+        {
+            if (points.Length != 3)
+            {
+                throw new InvalidOperationException("Wrong count of sides.");
+            }
+            this.Segments = new Segment[3];
+            for (var i = 0; i < points.Length - 1; i++)
+            {
+                this.Segments[i] = new Segment(points[i], points[i + 1]);
+            }
+            this.Id = Id;
+        }
 
         /// <summary>
         /// Calculates the area of triangle
         /// </summary>
-        /// <param name="points">Count of points</param>
         /// <returns>Returns the area of triangle</returns>
-        public override sealed double GetArea(Point[] points)
+        public sealed override double GetArea()
         {
-            Segments = new Segment[points.Length];
             var sumOfSegments = 0d;
             for (int i = 0; i < Segments.Length; i++)
             {
@@ -33,18 +43,19 @@ namespace FirstTask
         /// Generates random coordinates for triangle
         /// </summary>
         /// <returns>Returns array with random points</returns>
-        public Point[] GetRandomCoordinatesForTriangle()
+        public static Point[] GetRandomCoordinatesForTriangle()
         {
-            points = new Point[3];
+            var random = new Random();
+            Point[] points = new Point[3];
             for (int i = 0; i < 3; i++)
             {
                 var randomPoint = new Point();
-                randomPoint.X = random.GetRandom().X;
-                randomPoint.Y = random.GetRandom().Y;
+                randomPoint.X = random.GetRandomPoint().X;
+                randomPoint.Y = random.GetRandomPoint().Y;
                 if (i < 3 && !points.Contains(randomPoint))
                 {
-                    points[i].X = random.GetRandom().X;
-                    points[i].Y = random.GetRandom().Y;
+                    points[i].X = random.GetRandomPoint().X;
+                    points[i].Y = random.GetRandomPoint().Y;
                 }
             }
             return points;
@@ -59,7 +70,7 @@ namespace FirstTask
         {
             return obj is Triangle triangle &&
                    Id == triangle.Id &&
-                   EqualityComparer<Segment[]>.Default.Equals(Segments, triangle.Segments);
+                   Segments.SequenceEqual(triangle.Segments);
         }
 
         /// <summary>
@@ -68,6 +79,11 @@ namespace FirstTask
         /// <returns>Returns Hash Code of value</returns>
         public override int GetHashCode()
         {
+            int hash = 0;
+            foreach (var segments in Segments)
+            {
+                hash ^= segments.GetHashCode();
+            }
             return HashCode.Combine(Id, Segments);
         }
 
@@ -75,10 +91,15 @@ namespace FirstTask
         /// Converts the value as a string
         /// </summary>
         /// <returns>Returns converted value</returns>
-        /// 
         public override string ToString()
         {
-            return String.Format($"Name: {nameof(Triangle)}, Area: {GetArea(points)}, Perimeter: {GetPerimeter(points)}");
+            var stringBuilder = new StringBuilder();
+            stringBuilder.AppendLine($"Name: {nameof(Triangle)}");
+            for (int i = 0; i < this.Segments.Length; i++)
+            {
+                stringBuilder.AppendLine($"Point #{i + 1}: X = {this.Segments[i].FirstPoint.X}, Y = {this.Segments[i].FirstPoint.Y}.");
+            }
+            return stringBuilder.ToString();
         }
     }
 }

@@ -7,32 +7,29 @@ namespace FirstTask
     /// </summary>
     public abstract class Polygon: GeometricFigure
     {
-        private Point[] points { get; }
         /// <summary>
         /// Calculates the area of polygon
         /// </summary>
-        /// <param name="points">Array of points</param>
         /// <returns>Returns the area</returns>
-        public abstract override double GetArea(Point[]points);
+        public override double GetArea()
+        {
+            double sum = 0;
+            for (var iterator = 0; iterator < this.Segments.Length; iterator++)
+            {
+                sum += (this.Segments[iterator].FirstPoint.X + this.Segments[iterator].SecondPoint.X) *
+                       (this.Segments[iterator].FirstPoint.Y - this.Segments[iterator].SecondPoint.Y);
+            }
+            return (double)(0.5f * Math.Abs(sum));
+        }
 
         /// <summary>
         /// Calculates the perimeter of polygon
         /// </summary>
-        /// <param name="points">Array of points</param>
         /// <returns>Returns the perimeter</returns>
         public new double GetPerimeter()
         {
-            Segments = new Segment[points.Length];
-            int i = 0;
-            for (; i < points.Length - 1; i++)
-            {
-                Segments[i].A = points[i];
-                Segments[i].B = points[i + 1];
-            }
-            Segments[i].A = points[i];
-            Segments[i].B = points[0];
             var perimeter = 0d;
-            for (i = 0; i < Segments.Length; i++)
+            for (int i = 0; i < Segments.Length; i++)
             {
                 perimeter += Segments[i].GetLength();
             }

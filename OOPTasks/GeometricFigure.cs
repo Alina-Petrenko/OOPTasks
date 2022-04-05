@@ -13,34 +13,22 @@ namespace FirstTask
         /// <summary>
         /// Calculates the perimeter of geometric figure
         /// </summary>
-        /// <param name="points">Array of points</param>
         /// <returns>Returns the perimeter</returns>
-        public virtual double GetPerimeter(Point[] points)
+        public virtual double GetPerimeter()
         {
-            Segments = new Segment[points.Length];
-            int i = 0;
-            for (; i < points.Length - 1; i++)
-            {
-                Segments[i].A = points[i];
-                Segments[i].B = points[i + 1];
-            }
-            Segments[i].A = points[i];
-            Segments[i].B = points[0];
             var perimeter = 0d;
-            i = 0;
-            for (i = 0; i < Segments.Length; i++)
+            for (int i = 0; i < Segments.Length; i++)
             {
-                perimeter += Segments[i].GetLength();          
+                perimeter += Segments[i].GetLength();
             }
-            return Math.Round(perimeter,2);
+            return Math.Round(perimeter, 2);
         }
 
         /// <summary>
         /// Calculates the area of geometric figure
         /// </summary>
-        /// <param name="points">Array of points</param>
         /// <returns>Returns the area</returns>
-        public abstract double GetArea(Point[] points);
+        public abstract double GetArea();
     }
 }
 
