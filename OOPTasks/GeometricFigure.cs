@@ -18,7 +18,7 @@ namespace FirstTask
         public virtual double GetPerimeter(Point[] points)
         {
             Segments = new Segment[points.Length];
-            int i = 0;
+            var i = 0;
             for (; i < points.Length - 1; i++)
             {
                 Segments[i].A = points[i];
@@ -27,6 +27,7 @@ namespace FirstTask
             Segments[i].A = points[i];
             Segments[i].B = points[0];
             var perimeter = 0d;
+            // TODO: unnecessary assignment
             i = 0;
             for (i = 0; i < Segments.Length; i++)
             {

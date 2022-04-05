@@ -7,6 +7,7 @@ namespace FirstTask
     /// </summary>
     public struct Segment
     {
+        // TODO: Better to name "FirstPoint" and "SecondPoint". "A" and "B" is not obvious
         public Point A { get; set; }
         public Point B { get; set; }
         public Segment(Point a, Point b)

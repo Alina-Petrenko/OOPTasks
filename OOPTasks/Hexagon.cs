@@ -16,6 +16,7 @@ namespace FirstTask
         /// </summary>
         /// <param name="points">Count of points</param>
         /// <returns>Returns the area of hexagon</returns>
+        /// TODO: bad idea to use same name for input parameter as for field
         public override double GetArea(Point[] points)
         {
             var firstResult = 0d;
@@ -54,6 +55,7 @@ namespace FirstTask
             for (int i = 0; i < points.Length; i++)
             {
                 var randomPoint = new Point();
+                // TODO: here you call GetRandom() twice. If change return type to "Point", then will no need to call twice.
                 randomPoint.X = random.GetRandom().X;
                 randomPoint.Y = random.GetRandom().Y;
                 if (i < 3 && !points.Contains(randomPoint))

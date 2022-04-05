@@ -12,6 +12,7 @@ namespace FirstTask
         /// </summary>
         /// <param name="random"></param>
         /// <returns>Returns tuple of coordinates</returns>
+        /// TODO: GetRandomPoint
         public static (int X,int Y) GetRandom (this Random random)
         {
             return (random.Next(-10,11),random.Next(-10,11));

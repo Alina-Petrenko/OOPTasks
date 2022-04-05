@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace FirstTask
 {
@@ -9,15 +10,20 @@ namespace FirstTask
     /// </summary>
     public class Triangle : Polygon
     {
+        // TODO: could be readonly field
         private Random random = new Random();
-        private Point[] points { get; set;} 
+        private Point[] points { get; set; }
+
+        // TODO: Create constructor in which need to limit count of sent lines (3 - for triangle, 6 - for hexagon)
 
         /// <summary>
         /// Calculates the area of triangle
         /// </summary>
         /// <param name="points">Count of points</param>
         /// <returns>Returns the area of triangle</returns>
-        public override sealed double GetArea(Point[] points)
+        /// TODO: order of modifiers like "public override sealed" is wrong
+        /// TODO: https://stackoverflow.com/questions/191929/is-there-a-convention-to-the-order-of-modifiers-in-c
+        public sealed override double GetArea(Point[] points)
         {
             Segments = new Segment[points.Length];
             var sumOfSegments = 0d;
@@ -26,7 +32,7 @@ namespace FirstTask
                 sumOfSegments += Segments[i].GetLength();
             }
             var p = sumOfSegments / 2;
-            return (double)Math.Round(Math.Sqrt(p * (p - Segments[0].GetLength()) * (p - Segments[1].GetLength()) * (p - Segments[2].GetLength())),2);
+            return (double)Math.Round(Math.Sqrt(p * (p - Segments[0].GetLength()) * (p - Segments[1].GetLength()) * (p - Segments[2].GetLength())), 2);
         }
 
         /// <summary>
@@ -41,6 +47,7 @@ namespace FirstTask
                 var randomPoint = new Point();
                 randomPoint.X = random.GetRandom().X;
                 randomPoint.Y = random.GetRandom().Y;
+                // TODO: "i" will be always less than 3
                 if (i < 3 && !points.Contains(randomPoint))
                 {
                     points[i].X = random.GetRandom().X;
@@ -59,6 +66,8 @@ namespace FirstTask
         {
             return obj is Triangle triangle &&
                    Id == triangle.Id &&
+                   // TODO: Another option is to use LINQ method .SequenceEqual()
+                   Segments.SequenceEqual(triangle.Segments) &&
                    EqualityComparer<Segment[]>.Default.Equals(Segments, triangle.Segments);
         }
 
@@ -75,10 +84,24 @@ namespace FirstTask
         /// Converts the value as a string
         /// </summary>
         /// <returns>Returns converted value</returns>
-        /// 
+
         public override string ToString()
         {
             return String.Format($"Name: {nameof(Triangle)}, Area: {GetArea(points)}, Perimeter: {GetPerimeter(points)}");
+        }
+
+        /// TODO: usually ToString uses to represent an object as string.
+        /// TODO: in case of Triangle it should be like this
+        public string ToString2()
+        {
+            var stringBuilder = new StringBuilder();
+            stringBuilder.AppendLine($"Name: {nameof(Triangle)}");
+            for (int i = 0; i < points.Length; i++)
+            {
+                // TODO: better to create override ToString in Point class
+                stringBuilder.AppendLine($"Point #{i + 1}: X = {points[i].X}, Y = {points[i].Y}.");
+            }
+            return stringBuilder.ToString();
         }
     }
 }
