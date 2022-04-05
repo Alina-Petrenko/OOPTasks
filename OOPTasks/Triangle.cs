@@ -11,10 +11,48 @@ namespace FirstTask
     public class Triangle : Polygon
     {
         // TODO: could be readonly field
-        private Random random = new Random();
         private Point[] points { get; set; }
 
         // TODO: Create constructor in which need to limit count of sent lines (3 - for triangle, 6 - for hexagon)
+        public Triangle(Segment[] segments)
+        {
+            if (segments.Length != 3)
+            {
+                throw new InvalidOperationException("Wrong count of sides.");
+            }
+            this.Segments = segments;
+        }
+
+        public Triangle(Triangle triangle)
+        {
+            this.Segments = triangle.Segments;
+        }
+
+        public static implicit operator Triangle(Segment[] segments)
+        {
+            return new Triangle(segments);
+        }
+
+        public static explicit operator Segment[](Triangle triangle)
+        {
+            return triangle.Segments;
+        }
+
+        public Triangle(Point[] points)
+        {
+            if (points.Length != 3)
+            {
+                throw new InvalidOperationException("");
+            }
+
+            this.Segments = new Segment[3];
+            for (var i = 0; i < points.Length - 1; i++)
+            {
+                this.Segments[i] = new Segment(points[i], points[i + 1]);
+            }
+
+            this.Segments[points.Length - 1] = new Segment(points[^1], points[0]);
+        }
 
         /// <summary>
         /// Calculates the area of triangle
@@ -23,9 +61,8 @@ namespace FirstTask
         /// <returns>Returns the area of triangle</returns>
         /// TODO: order of modifiers like "public override sealed" is wrong
         /// TODO: https://stackoverflow.com/questions/191929/is-there-a-convention-to-the-order-of-modifiers-in-c
-        public sealed override double GetArea(Point[] points)
+        public sealed override double GetArea()
         {
-            Segments = new Segment[points.Length];
             var sumOfSegments = 0d;
             for (int i = 0; i < Segments.Length; i++)
             {
@@ -39,9 +76,10 @@ namespace FirstTask
         /// Generates random coordinates for triangle
         /// </summary>
         /// <returns>Returns array with random points</returns>
-        public Point[] GetRandomCoordinatesForTriangle()
+        public static Point[] GetRandomCoordinatesForTriangle()
         {
-            points = new Point[3];
+            var random = new Random();
+            var points = new Point[3];
             for (int i = 0; i < 3; i++)
             {
                 var randomPoint = new Point();
@@ -100,6 +138,12 @@ namespace FirstTask
             {
                 // TODO: better to create override ToString in Point class
                 stringBuilder.AppendLine($"Point #{i + 1}: X = {points[i].X}, Y = {points[i].Y}.");
+            }
+
+            for (int i = 0; i < this.Segments.Length; i++)
+            {
+                // TODO: better to create override ToString in Point class
+                stringBuilder.AppendLine($"Point #{i + 1}: X = {this.Segments[i].A.X}, Y = {this.Segments[i].A.Y}.");
             }
             return stringBuilder.ToString();
         }

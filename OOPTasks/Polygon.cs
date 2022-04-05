@@ -8,7 +8,7 @@ namespace FirstTask
     public abstract class Polygon: GeometricFigure
     {
         // TODO: we already have Segments in GeometricFigure class. We should operate them.
-        private Point[] points { get; }
+        // private Point[] points { get; }
         /// <summary>
         /// Calculates the area of polygon
         /// </summary>
@@ -23,18 +23,15 @@ namespace FirstTask
         /// </summary>
         /// <param name="points">Array of points from which figure consists</param>
         /// <returns>Square of figure</returns>
-        public double GetArea2(Point[] points)
+        public double GetArea2()
         {
             double sum = 0;
-
-            for (var iterator = 0; iterator < points.Length - 1; iterator++)
+            
+            for (var iterator = 0; iterator < this.Segments.Length; iterator++)
             {
-                sum += (points[iterator].X + points[iterator+1].X) *
-                       (points[iterator].Y - points[iterator+1].Y);
+                sum += (this.Segments[iterator].A.X + this.Segments[iterator].B.X) *
+                       (this.Segments[iterator].A.Y - this.Segments[iterator].B.Y);
             }
-
-            sum += (points[points.Length].X + points[0].X) *
-                   (points[points.Length].Y - points[0].Y);
 
             var square = 0.5f * Math.Abs(sum);
             return square;

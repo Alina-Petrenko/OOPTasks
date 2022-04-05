@@ -15,7 +15,7 @@ namespace FirstTask
         /// </summary>
         /// <param name="points">Array of points</param>
         /// <returns>Returns the perimeter</returns>
-        public virtual double GetPerimeter(Point[] points)
+        public virtual double GetPerimeter()
         {
             Segments = new Segment[points.Length];
             var i = 0;

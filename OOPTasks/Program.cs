@@ -6,10 +6,21 @@ namespace FirstTask
     {
         static void Main()
         {
-            Hexagon hexagon = new Hexagon();
+            var hexagonPoints = Hexagon.GetRandomCoordinatesForHexagon();
+            Hexagon hexagon = new Hexagon(hexagonPoints);
+
+
             GeometricFigure hexagonGeometricFigure = new Hexagon();
             Polygon hexagonPolygon = new Hexagon();
-            
+            Segment[] triangleSegments = new Segment[3];
+
+            Triangle triangleExplicit = triangleSegments;
+            Segment[] segmentsImplicit = (Segment[])triangleExplicit;
+
+            foreach (var triangle in triangleSegments)
+            {
+                
+            }
             Triangle triangle = new Triangle();
             Polygon trianglePolygon = new Triangle();
             GeometricFigure triangleGeometricFigure = new Triangle();

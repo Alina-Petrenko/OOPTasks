@@ -9,15 +9,34 @@ namespace FirstTask
     /// </summary>
     public class Hexagon : Polygon
     {
-        private Random random = new Random();
-        private Point [] points { get; set; }
+        public Hegaxon(Point[] points)
+        {
+            if (points.Length != 6)
+            {
+                throw new InvalidOperationException("");
+            }
+
+            this.Segments = new Segment[6];
+            for (var i = 0; i < points.Length - 1; i++)
+            {
+                this.Segments[i] = new Segment(points[i], points[i + 1]);
+            }
+
+            this.Segments[points.Length - 1] = new Segment(points[^1], points[0]);
+        }
+
+        public Hexagon(Segment[] segments)
+        {
+            this.Segments = segments;
+        }
+
         /// <summary>
         /// Calculates the area of hexagon
         /// </summary>
         /// <param name="points">Count of points</param>
         /// <returns>Returns the area of hexagon</returns>
         /// TODO: bad idea to use same name for input parameter as for field
-        public override double GetArea(Point[] points)
+        public override double GetArea()
         {
             var firstResult = 0d;
             int i = 0;
@@ -49,9 +68,10 @@ namespace FirstTask
         /// Generates random coordinates for hexagon
         /// </summary>
         /// <returns>Returns array with random points</returns>
-        public Point[] GetRandomCoordinatesForHexagon()
+        public static Point[] GetRandomCoordinatesForHexagon()
         {
-            points = new Point[6];
+            var random = new Random();
+            var points = new Point[6];
             for (int i = 0; i < points.Length; i++)
             {
                 var randomPoint = new Point();
@@ -139,7 +159,7 @@ namespace FirstTask
         /// <param name="firstPointSecondSegment">First point of second segment</param>
         /// <param name="secondPointSecondSegment">Second point of second segment</param>
         /// <returns>Returns a value based on the presence of an intersection</returns>
-        private bool LineIntersectionCheck(Point firstPointFirstSegment, Point secondPointFirstSegment, Point firstPointSecondSegment, Point secondPointSecondSegment)
+        private static bool LineIntersectionCheck(Point firstPointFirstSegment, Point secondPointFirstSegment, Point firstPointSecondSegment, Point secondPointSecondSegment)
         {
             if (secondPointFirstSegment.X < firstPointFirstSegment.X)
             {
@@ -233,6 +253,7 @@ namespace FirstTask
         {
             // TODO: it`s bad implementation of GetHashCode(). It could be collisions.
             // TODO: good solution will be implement GetHashCode() in "Segment", and then call it for each segment in "Segments"
+            // foreach for Segment[0] ^ Segment[1] ^ ...
             return HashCode.Combine(Id, Segments);
         }
 
