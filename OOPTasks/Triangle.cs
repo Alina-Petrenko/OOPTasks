@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
@@ -8,7 +7,7 @@ namespace FirstTask
     /// <summary>
     /// Class represents triangle
     /// </summary>
-    public class Triangle : Polygon
+    public sealed class Triangle : Polygon
     {
         public Triangle(Point[] points, int Id)
         {
@@ -36,7 +35,7 @@ namespace FirstTask
                 sumOfSegments += Segments[i].GetLength();
             }
             var p = sumOfSegments / 2;
-            return (double)Math.Round(Math.Sqrt(p * (p - Segments[0].GetLength()) * (p - Segments[1].GetLength()) * (p - Segments[2].GetLength())),2);
+            return (double)Math.Round(Math.Sqrt(Math.Abs(p * (p - Segments[0].GetLength()) * (p - Segments[1].GetLength()) * (p - Segments[2].GetLength()))),2);            
         }
 
         /// <summary>
