@@ -13,7 +13,7 @@ namespace FirstTask
         {
             if (points.Length != 6)
             {
-                throw new InvalidOperationException("");
+                throw new InvalidOperationException("Wrong count of sides.");
             }
 
             this.Segments = new Segment[6];
