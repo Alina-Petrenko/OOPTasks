@@ -7,7 +7,7 @@ namespace SecondTask
     /// <summary>
     /// Class represents hexagon
     /// </summary>
-    public class Hexagon : Polygon
+    public class Hexagon : Polygon, IComparable, ICloneable
     {
         public Hexagon(Point[] points, int Id)
         {
@@ -247,6 +247,33 @@ namespace SecondTask
                 stringBuilder.AppendLine($"Point #{i + 1}: X = {this.Segments[i].FirstPoint.X}, Y = {this.Segments[i].FirstPoint.Y}.");
             }
             return stringBuilder.ToString();
+        }
+
+        public new int CompareTo(object obj)
+        {
+            if (!(obj is Hexagon))
+                throw new ArgumentException("Object is not a Hexagon");
+            Hexagon hexagon = (Hexagon)obj;
+            var firstHexagon = this.GetArea();
+            var secondHexagon = hexagon.GetArea();
+            if (firstHexagon > secondHexagon)
+                return 1;
+            else if (secondHexagon > firstHexagon)
+                return -1;
+            else
+                return 0;
+        }
+
+        public new object Clone()
+        {
+            var newHexagon = (Hexagon)this.MemberwiseClone();
+            var segments = new Segment[this.Segments.Length];
+            for (int i = 0; i < this.Segments.Length; i++)
+            {
+                segments[i].FirstPoint = this.Segments[i].FirstPoint;
+            }
+            newHexagon.Segments = segments;
+            return newHexagon;
         }
     }
 }

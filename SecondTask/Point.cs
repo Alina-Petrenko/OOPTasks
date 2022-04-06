@@ -47,5 +47,28 @@ namespace SecondTask
             stringBuilder.AppendLine($"Point: X = {X}, Y = {Y}.");
             return stringBuilder.ToString();
         }
+        public static Point operator +(Point firstPoint, Point secondPoint)
+        {
+            return new Point { X = firstPoint.X + secondPoint.X, Y = firstPoint.Y + secondPoint.Y };
+        }
+        public static Point operator -(Point firstPoint, Point secondPoint)
+        {
+            return new Point { X = firstPoint.X - secondPoint.X, Y = firstPoint.Y - secondPoint.Y };
+        }
+        public static bool operator ==(Point firstPoint, Point secondPoint)
+        {
+            if (firstPoint.X == secondPoint.X && firstPoint.Y == secondPoint.Y)
+                return true;
+            else
+                return false;
+        }
+        public static bool operator !=(Point firstPoint, Point secondPoint)
+        {
+            if (firstPoint.X != secondPoint.X && firstPoint.Y != secondPoint.Y)
+                return true;
+            else
+                return false;
+        }
     }
+
 }

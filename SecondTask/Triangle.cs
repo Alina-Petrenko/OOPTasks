@@ -7,7 +7,7 @@ namespace SecondTask
     /// <summary>
     /// Class represents triangle
     /// </summary>
-    public sealed class Triangle : Polygon
+    public sealed class Triangle : Polygon, ICloneable, IComparable
     {
         public Triangle(Point[] points, int Id)
         {
@@ -20,6 +20,7 @@ namespace SecondTask
             {
                 this.Segments[i] = new Segment(points[i], points[i + 1]);
             }
+            this.Segments[points.Length - 1] = new Segment(points[^1], points[0]);
             this.Id = Id;
         }
 
@@ -35,7 +36,7 @@ namespace SecondTask
                 sumOfSegments += Segments[i].GetLength();
             }
             var p = sumOfSegments / 2;
-            return (double)Math.Round(Math.Sqrt(Math.Abs(p * (p - Segments[0].GetLength()) * (p - Segments[1].GetLength()) * (p - Segments[2].GetLength()))),2);            
+            return (double)Math.Round(Math.Sqrt(Math.Abs(p * (p - Segments[0].GetLength()) * (p - Segments[1].GetLength()) * (p - Segments[2].GetLength()))), 2);
         }
 
         /// <summary>
@@ -100,5 +101,35 @@ namespace SecondTask
             }
             return stringBuilder.ToString();
         }
+
+        public new int CompareTo(object obj)
+        {
+            if (!(obj is Triangle))
+                throw new ArgumentException("Object is not a Triangle");
+            Triangle triangle = (Triangle)obj;
+            var firstTriangle = this.GetArea();
+            var secondTriangle = triangle.GetArea();
+            if (firstTriangle > secondTriangle)
+                return 1;
+            else if (secondTriangle > firstTriangle)
+                return -1;
+            else
+                return 0;
+        }
+        public new object Clone()
+        {
+            var newTriangle = (Triangle)this.MemberwiseClone();
+            var segments = new Segment[this.Segments.Length];
+            for (int i = 0; i < this.Segments.Length; i++)
+            {
+                segments[i].FirstPoint = this.Segments[i].FirstPoint;
+                segments[i].SecondPoint = this.Segments[i].SecondPoint;
+            }
+            newTriangle.Segments = segments;
+            return newTriangle;
+        }
+
     }
 }
+
+
