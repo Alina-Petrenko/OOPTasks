@@ -9,18 +9,17 @@ namespace SecondTask
     /// </summary>
     public sealed class Triangle : Polygon, ICloneable, IComparable
     {
-        public Triangle(Point[] points, int Id)
+        public Triangle(Segment[] segments, int Id): base(segments, Id)
         {
-            if (points.Length != 3)
+            if (segments.Length != 3)
             {
                 throw new InvalidOperationException("Wrong count of sides.");
             }
             this.Segments = new Segment[3];
-            for (var i = 0; i < points.Length - 1; i++)
+            for (var i = 0; i < segments.Length; i++)
             {
-                this.Segments[i] = new Segment(points[i], points[i + 1]);
+                this.Segments[i] = segments[i];
             }
-            this.Segments[points.Length - 1] = new Segment(points[^1], points[0]);
             this.Id = Id;
         }
 
@@ -43,7 +42,7 @@ namespace SecondTask
         /// Generates random coordinates for triangle
         /// </summary>
         /// <returns>Returns array with random points</returns>
-        public static Point[] GetRandomCoordinatesForTriangle()
+        public static Segment[] GetRandomCoordinatesForTriangle()
         {
             var random = new Random();
             Point[] points = new Point[3];
@@ -58,7 +57,9 @@ namespace SecondTask
                     points[i].Y = random.GetRandomPoint().Y;
                 }
             }
-            return points;
+
+            var newSegments = GetSegments(points);
+            return newSegments;
         }
 
         /// <summary>
@@ -102,6 +103,12 @@ namespace SecondTask
             return stringBuilder.ToString();
         }
 
+        /// <summary>
+        /// Compares two objects
+        /// </summary>
+        /// <param name="obj">Object for comparison</param>
+        /// <returns>Returns result of comparison</returns>
+        /// <exception cref="ArgumentException">Object is not a Triangle</exception>
         public new int CompareTo(object obj)
         {
             if (!(obj is Triangle))
@@ -116,6 +123,11 @@ namespace SecondTask
             else
                 return 0;
         }
+
+        /// <summary>
+        /// Clones an object
+        /// </summary>
+        /// <returns>Returns the cloned object</returns>
         public new object Clone()
         {
             var newTriangle = (Triangle)this.MemberwiseClone();
@@ -129,6 +141,23 @@ namespace SecondTask
             return newTriangle;
         }
 
+        /// <summary>
+        /// Converts an array of segments to a Triangle object
+        /// </summary>
+        /// <param name="segments">Array of segments</param>
+        public static implicit operator Triangle(Segment[] segments)
+        {
+            return new Triangle(segments, 4);
+        }
+
+        /// <summary>
+        /// Converts a Hexagon object to an array of segments
+        /// </summary>
+        /// <param name="triangle">Hexagon</param>
+        public static explicit operator Segment[](Triangle triangle)
+        {
+            return triangle.Segments;
+        }
     }
 }
 

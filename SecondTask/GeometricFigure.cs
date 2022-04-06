@@ -29,6 +29,22 @@ namespace SecondTask
         /// </summary>
         /// <returns>Returns the area</returns>
         public abstract double GetArea();
+
+        /// <summary>
+        /// Converts an array of points to an array of segments
+        /// </summary>
+        /// <param name="points">Array of points</param>
+        /// <returns>Returns an array of segments</returns>
+        protected static Segment[] GetSegments(Point[] points)
+        {
+            Segment[] segments = new Segment[points.Length];
+            for (int i = 0; i < segments.Length - 1; i++)
+            {
+                segments[i] = new Segment(points[i], points[i + 1]);
+            }
+            segments[^1] = new Segment(points[^1], points[0]);
+            return segments;
+        }
     }
 }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Text;
 
 namespace SecondTask
 {
@@ -8,14 +9,38 @@ namespace SecondTask
     /// </summary>
     public class Polygon : GeometricFigure, ICloneable, IComparable
     {
+        public Polygon(Segment[] segments, int Id)
+        {
+            this.Segments = new Segment[6];
+            for (var i = 0; i < segments.Length; i++)
+            {
+                this.Segments[i] = segments[i];
+            }
+            this.Id = Id;
+        }
+
+        /// <summary>
+        /// Clones an object
+        /// </summary>
+        /// <returns>Returns the cloned object</returns>
         public object Clone()
         {
-            Polygon newPolygon = (Polygon)this.MemberwiseClone();
-            Segment[] segments = new Segment[this.Segments.Length];
+            var newPolygon = (Polygon)this.MemberwiseClone();
+            var segments = new Segment[this.Segments.Length];
+            for (int i = 0; i < this.Segments.Length; i++)
+            {
+                segments[i].FirstPoint = this.Segments[i].FirstPoint;
+            }
             newPolygon.Segments = segments;
             return newPolygon;
         }
 
+        /// <summary>
+        /// Compares two objects
+        /// </summary>
+        /// <param name="obj">Object for comparison</param>
+        /// <returns>Returns result of comparison</returns>
+        /// <exception cref="ArgumentException">Object is not a Polygon</exception>
         public int CompareTo(object obj)
         {
             if (!(obj is Polygon))
@@ -31,12 +56,22 @@ namespace SecondTask
                 return 0;
         }
 
+        /// <summary>
+        /// Compares two values
+        /// </summary>
+        /// <param name="obj">Compared value</param>
+        /// <returns>Returns true, if values are the same and false if values are different</returns>
         public override bool Equals(object obj)
         {
             return obj is Polygon polygon &&
             Id == polygon.Id &&
             Segments.SequenceEqual(polygon.Segments);
         }
+
+        /// <summary>
+        /// Gets hash code of value
+        /// </summary>
+        /// <returns>Returns Hash Code of value</returns>
         public override int GetHashCode()
         {
             int hash = 0;
@@ -46,6 +81,7 @@ namespace SecondTask
             }
             return HashCode.Combine(Id, Segments);
         }
+
         /// <summary>
         /// Calculates the area of polygon
         /// </summary>
@@ -75,9 +111,16 @@ namespace SecondTask
             return Math.Round(perimeter, 2);
         }
 
+        /// <summary>
+        /// Overloads + operator
+        /// </summary>
+        /// <param name="firstPolygon">First value</param>
+        /// <param name="secondPolygon">Second Value</param>
+        /// <returns>Returns result of sum</returns>
+        /// <exception cref="InvalidOperationException">Different count of sides.</exception>
         public static Polygon operator +(Polygon firstPolygon, Polygon secondPolygon)
         {
-            Polygon polygon = new Polygon();
+            Polygon polygon = new Polygon(firstPolygon.Segments,firstPolygon.Id+secondPolygon.Id);
             polygon.Segments = new Segment[firstPolygon.Segments.Length];
             if (firstPolygon.Segments.Length != secondPolygon.Segments.Length)
             {
@@ -87,15 +130,23 @@ namespace SecondTask
             {
                 for (int i = 0; i < firstPolygon.Segments.Length; i++)
                 {
-                    polygon.Segments[i].FirstPoint = firstPolygon.Segments[i].FirstPoint + secondPolygon.Segments[i].FirstPoint;
-                    polygon.Segments[i].SecondPoint = firstPolygon.Segments[i].SecondPoint + secondPolygon.Segments[i].SecondPoint;
+                    polygon.Segments[i].FirstPoint = new Point((firstPolygon.Segments[i].FirstPoint.X + secondPolygon.Segments[i].FirstPoint.X), (firstPolygon.Segments[i].FirstPoint.Y + secondPolygon.Segments[i].FirstPoint.Y));
+                    polygon.Segments[i].SecondPoint = new Point((firstPolygon.Segments[i].SecondPoint.X + secondPolygon.Segments[i].SecondPoint.X), (firstPolygon.Segments[i].SecondPoint.Y + secondPolygon.Segments[i].SecondPoint.Y)); ;
                 }
                 return polygon;
             }
         }
+
+        /// <summary>
+        /// Overloads - operator
+        /// </summary>
+        /// <param name="firstPolygon">First value</param>
+        /// <param name="secondPolygon">Second Value</param>
+        /// <returns>Returns result of subtraction</returns>
+        /// <exception cref="InvalidOperationException">Different count of sides.</exception>
         public static Polygon operator -(Polygon firstPolygon, Polygon secondPolygon)
         {
-            Polygon polygon = new Polygon();
+            Polygon polygon = new Polygon(firstPolygon.Segments, firstPolygon.Id + secondPolygon.Id);
             polygon.Segments = new Segment[firstPolygon.Segments.Length];
             if (firstPolygon.Segments.Length != secondPolygon.Segments.Length)
             {
@@ -111,9 +162,17 @@ namespace SecondTask
                 return polygon;
             }
         }
+
+        /// <summary>
+        /// Overloads == operator
+        /// </summary>
+        /// <param name="firstPolygon">First value</param>
+        /// <param name="secondPolygon">Second Value</param>
+        /// <returns>Returns equality comparison result</returns>
+        /// <exception cref="InvalidOperationException"></exception>
         public static bool operator ==(Polygon firstPolygon, Polygon secondPolygon)
         {
-            Polygon polygon = new Polygon();
+            Polygon polygon = new Polygon(firstPolygon.Segments, firstPolygon.Id + secondPolygon.Id);
             polygon.Segments = new Segment[firstPolygon.Segments.Length];
             if (firstPolygon.Segments.Length != secondPolygon.Segments.Length)
             {
@@ -123,7 +182,7 @@ namespace SecondTask
             {
                 for (int i = 0; i < firstPolygon.Segments.Length; i++)
                 {
-                    if ((firstPolygon.Segments[i].FirstPoint == secondPolygon.Segments[i].FirstPoint) && (firstPolygon.Segments[i].FirstPoint == secondPolygon.Segments[i].FirstPoint))
+                    if ((firstPolygon.Segments[i].FirstPoint == secondPolygon.Segments[i].FirstPoint) && (firstPolygon.Segments[i].SecondPoint == secondPolygon.Segments[i].SecondPoint))
                     {
                         continue;
                     }
@@ -135,9 +194,17 @@ namespace SecondTask
                 return true;
             }
         }
+
+        /// <summary>
+        /// Overloads != operator
+        /// </summary>
+        /// <param name="firstPolygon">First value</param>
+        /// <param name="secondPolygon">Second Value</param>
+        /// <returns>Returns inequality comparison result</returns>
+        /// <exception cref="InvalidOperationException"></exception>
         public static bool operator !=(Polygon firstPolygon, Polygon secondPolygon)
         {
-            Polygon polygon = new Polygon();
+            Polygon polygon = new Polygon(firstPolygon.Segments, firstPolygon.Id + secondPolygon.Id);
             polygon.Segments = new Segment[firstPolygon.Segments.Length];
             if (firstPolygon.Segments.Length != secondPolygon.Segments.Length)
             {
@@ -145,31 +212,60 @@ namespace SecondTask
             }
             else
             {
+                var counter = 0;
                 for (int i = 0; i < firstPolygon.Segments.Length; i++)
                 {
-                    if ((firstPolygon.Segments[i].FirstPoint != secondPolygon.Segments[i].FirstPoint) && (firstPolygon.Segments[i].FirstPoint != secondPolygon.Segments[i].FirstPoint))
+                    if ((firstPolygon.Segments[i].FirstPoint != secondPolygon.Segments[i].FirstPoint) && (firstPolygon.Segments[i].SecondPoint != secondPolygon.Segments[i].SecondPoint))
                     {
-                        continue;
+                        counter++;
                     }
                     else
                     {
-                        return false;
+                        continue;
                     }
                 }
-                return true;
+                if (counter != 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }    
             }
         }
 
+        /// <summary>
+        /// Converts an array of segments to a Polygon object
+        /// </summary>
+        /// <param name="segments">Array of segments</param>
         public static implicit operator Polygon(Segment[] segments)
         {
-            Polygon polygon = new Polygon();
-            polygon.Segments = segments;
-            return polygon;
+            return new Polygon(segments, 4);
         }
 
+        /// <summary>
+        /// Converts a Polygon object to an array of segments
+        /// </summary>
+        /// <param name="polygon">Polygon</param>
         public static explicit operator Segment[](Polygon polygon)
         {
             return polygon.Segments;
+        }
+
+        /// <summary>
+        /// Converts the value as a string
+        /// </summary>
+        /// <returns>Returns converted value</returns>
+        public override string ToString()
+        {
+            var stringBuilder = new StringBuilder();
+            stringBuilder.AppendLine($"Name: {nameof(Polygon)}");
+            for (int i = 0; i < this.Segments.Length; i++)
+            {
+                stringBuilder.AppendLine($"Point #{i + 1}: X = {this.Segments[i].FirstPoint.X}, Y = {this.Segments[i].FirstPoint.Y}.");
+            }
+            return stringBuilder.ToString();
         }
     }
 

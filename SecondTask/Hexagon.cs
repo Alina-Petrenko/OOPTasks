@@ -9,20 +9,18 @@ namespace SecondTask
     /// </summary>
     public class Hexagon : Polygon, IComparable, ICloneable
     {
-        public Hexagon(Point[] points, int Id)
+        public Hexagon(Segment[] segments, int Id) : base(segments, Id)
         {
-            if (points.Length != 6)
+            if (segments.Length != 6)
             {
                 throw new InvalidOperationException("Wrong count of sides.");
             }
 
             this.Segments = new Segment[6];
-            for (var i = 0; i < points.Length - 1; i++)
+            for (var i = 0; i < segments.Length; i++)
             {
-                this.Segments[i] = new Segment(points[i], points[i + 1]);
+                this.Segments[i] = segments[i];
             }
-
-            this.Segments[points.Length - 1] = new Segment(points[^1], points[0]);
             this.Id = Id;
         }
 
@@ -45,7 +43,7 @@ namespace SecondTask
         /// Generates random coordinates for hexagon
         /// </summary>
         /// <returns>Returns array with random points</returns>
-        public static Point[] GetRandomCoordinatesForHexagon()
+        public static Segment[] GetRandomCoordinatesForHexagon()
         {
             var random = new Random();
             Point[] points = new Point[6];
@@ -123,7 +121,8 @@ namespace SecondTask
                     }
                 }
             }
-            return points;
+            var newSegments = GetSegments(points);
+            return newSegments;
         }
 
         /// <summary>
@@ -249,6 +248,12 @@ namespace SecondTask
             return stringBuilder.ToString();
         }
 
+        /// <summary>
+        /// Compares two objects
+        /// </summary>
+        /// <param name="obj">Object for comparison</param>
+        /// <returns>Returns result of comparison</returns>
+        /// <exception cref="ArgumentException">Object is not a Hexagon</exception>
         public new int CompareTo(object obj)
         {
             if (!(obj is Hexagon))
@@ -264,6 +269,10 @@ namespace SecondTask
                 return 0;
         }
 
+        /// <summary>
+        /// Clones an object
+        /// </summary>
+        /// <returns>Returns the cloned object</returns>
         public new object Clone()
         {
             var newHexagon = (Hexagon)this.MemberwiseClone();
@@ -274,6 +283,24 @@ namespace SecondTask
             }
             newHexagon.Segments = segments;
             return newHexagon;
+        }
+
+        /// <summary>
+        /// Converts an array of segments to a Hexagon object
+        /// </summary>
+        /// <param name="segments">Array of segments</param>
+        public static implicit operator Hexagon(Segment[] segments)
+        {
+            return new Hexagon(segments, 4);
+        }
+
+        /// <summary>
+        /// Converts a Hexagon object to an array of segments
+        /// </summary>
+        /// <param name="hexagon">Hexagon</param>
+        public static explicit operator Segment[](Hexagon hexagon)
+        {
+            return hexagon.Segments;
         }
     }
 }
