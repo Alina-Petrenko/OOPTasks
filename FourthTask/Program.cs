@@ -41,8 +41,8 @@ namespace FourthTask
             Console.WriteLine($"pantherIRunnable distance: {pantherIRunnableResult} km/h, speed: 45, time: {pantherIRunnable.EndTime - pantherIRunnable.StartTime}");
 
             IMobile pantherIMobile = new Panther("Panther", 6, Gender.Male, 79, new DateTime(2022, 4, 7, 19, 34, 19), new DateTime(2022, 4, 7, 20, 06, 56));
-            var pantherIMobileResult = pantherIMobile.DistanceCalculation(45, (new DateTime(2022, 4, 7, 20, 06, 56) - new DateTime(2022, 4, 7, 19, 34, 19)));
-            Console.WriteLine($"pantherIMobile distance: {pantherIMobileResult} km/h, speed: 45, time: {new DateTime(2022, 4, 7, 20, 06, 56) - new DateTime(2022, 4, 7, 19, 34, 19)}");
+            var pantherIMobileResult = pantherIMobile.DistanceCalculation(79, (new DateTime(2022, 4, 7, 20, 06, 56) - new DateTime(2022, 4, 7, 19, 34, 19)));
+            Console.WriteLine($"pantherIMobile distance: {pantherIMobileResult} km/h, speed: 79, time: {new DateTime(2022, 4, 7, 20, 06, 56) - new DateTime(2022, 4, 7, 19, 34, 19)}");
         }
     }
 }
