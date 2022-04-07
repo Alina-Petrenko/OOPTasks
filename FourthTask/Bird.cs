@@ -12,12 +12,13 @@ namespace FourthTask
         /// <summary>
         /// Stopwatch
         /// </summary>
+        /// TODO: could be readonly
         private Stopwatch _stopwatch = new Stopwatch();
         #endregion
 
         #region Properties
         /// <summary>
-        /// Is bird in sky
+        /// Is bird in sky?
         /// </summary>
         public bool InSky { get; set; }
         #endregion
@@ -72,7 +73,8 @@ namespace FourthTask
         /// <returns>Returns distance covered</returns>
         public double DistanceCalculation(int speed, TimeSpan time)
         {
-            var distance = Math.Round(((double)(time.TotalMinutes) / 60 * speed),2);
+            // TODO: convert to double not need. "time.TotalMinutes" already double
+            var distance = Math.Round(time.TotalMinutes / 60 * speed, 2);
             return distance;
         }
 
@@ -82,6 +84,8 @@ namespace FourthTask
         /// <param name="speed">Received speed</param>
         /// <returns>Returns speed</returns>
         /// <exception cref="OverSpeedException">Over speed for animal</exception>
+        /// TODO: this method could be called inside Animal.Speed set accessor
+        /// TODO: then will not need to call it in constructor or anywhere else
         public override int SpeedCheck(int speed)
         {
             if (speed > 80)

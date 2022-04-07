@@ -21,7 +21,8 @@ namespace FourthTask
 
             var birdTime = bird.Land();
             var birdResult = bird.DistanceCalculation(bird.Speed, birdTime);
-            Console.WriteLine($"bird distance: {birdResult} km/h, speed: {bird.Speed}, time: {birdTime}");
+            // TODO: birdResult - it's distance (km), not speed (km/h)
+            Console.WriteLine($"bird distance: {birdResult} km, speed: {bird.Speed}, time: {birdTime}");
 
             var birdIFlyableTime = birdIFlyable.Land();
             var birdIFlyableResult = birdIFlyable.DistanceCalculation(12, birdIFlyableTime);

@@ -11,10 +11,10 @@ namespace FourthTask
         /// <summary>
         /// Returns an error message
         /// </summary>
-        /// <param name="speed">Recieved speed</param>
+        /// <param name="speed">Received speed</param>
         public OverSpeedException(int speed)
         {
-            Console.WriteLine($"Over speed for animal: {speed}. Expected limit: 80");
+            Console.WriteLine($"Over speed for animal: {speed}. Max speed limit: 80");
         }
         #endregion
     }
