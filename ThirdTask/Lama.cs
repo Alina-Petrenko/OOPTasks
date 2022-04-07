@@ -9,8 +9,8 @@
         {
             Name = name;
             Age = age;
-            CountOfPaw = 4;
-            AnimalGender = genders;
+            PawCount = 4;
+            Gender = genders;
             Speed = SpeedCheck(speed);
         }
 

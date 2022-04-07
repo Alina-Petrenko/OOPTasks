@@ -10,24 +10,21 @@ namespace ThirdTask
         /// <summary>
         /// Generates random animal
         /// </summary>
-        /// <param name="random"></param>
+        /// <param name="random">Instance of <see cref="Random"/></param>
         /// <returns>Returns random animal</returns>
+        /// TODO: method refactored
         public static Animal GetRandomAnimal(this Random random)
         {
-            int value;
-            value = random.Next(1, 4);
-            switch (value)
+            var value = random.Next(1, 4);
+            var genders = Enum.GetValues(typeof(Gender));
+
+            return value switch
             {
-                case 1:
-                    return new Spider("Spider", random.Next(1, 6), (Gender)Enum.GetValues(typeof(Gender)).GetValue(random.Next(0, 2)), random.Next(1, 5));
-                case 2:
-                    return new Lama("Lama", random.Next(1, 21), (Gender)Enum.GetValues(typeof(Gender)).GetValue(random.Next(0, 2)), random.Next(1, 20));
-                case 3:
-                    return new Snake("Snake", random.Next(1, 10), (Gender)Enum.GetValues(typeof(Gender)).GetValue(random.Next(0, 2)), random.Next(1, 10));
-                default:
-                    break;
-            }
-            throw new Exception("Something wrong");
+                1 => new Spider("Spider", random.Next(1, 6), (Gender)genders.GetValue(random.Next(0, 2)), random.Next(1, 5)),
+                2 => new Lama("Lama", random.Next(1, 21), (Gender)genders.GetValue(random.Next(0, 2)), random.Next(1, 20)),
+                3 => new Snake("Snake", random.Next(1, 10), (Gender)genders.GetValue(random.Next(0, 2)), random.Next(1, 10)),
+                _ => throw new Exception("Wrong value")
+            };
         }
     }
 }

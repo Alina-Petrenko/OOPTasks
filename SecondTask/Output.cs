@@ -23,9 +23,14 @@ namespace SecondTask
             Polygon secondPolygon = new Polygon(polygonSecondSegments, 2);
             Console.WriteLine(secondPolygon.ToString());
 
-            Console.WriteLine("Cloning firstPolygon");
             Polygon newPoly = (Polygon)firstPolygon.Clone();
+            //TODO: added code to check that Clone was implemented in a right way.
+            //TODO: changed value in cloned Polygon and output both original and cloned Polygon
+            newPoly.Segments[0].FirstPoint = new Point(100,100);
+            Console.WriteLine("Cloned firstPolygon with changed first point");
             Console.WriteLine(newPoly.ToString());
+            Console.WriteLine("Original firstPolygon");
+            Console.WriteLine(firstPolygon.ToString());
 
             Console.WriteLine("Comparing firstPolygon with secondPolygon");
             if (firstPolygon.CompareTo(secondPolygon) > 0)
@@ -38,16 +43,17 @@ namespace SecondTask
             }
             else
             {
-                Console.WriteLine("Polygones are the same");
+                Console.WriteLine("Polygons are the same");
             }
 
-            Console.WriteLine("Math operation");
+            Console.WriteLine("_____________________________________________");
+            Console.WriteLine("Math operations");
 
             newPoly = firstPolygon + secondPolygon;
-            Console.WriteLine($"Sum\n {newPoly}");
+            Console.WriteLine($"Sum\n{newPoly}");
 
             newPoly = firstPolygon - secondPolygon;
-            Console.WriteLine($"Subtraction\n {newPoly}");
+            Console.WriteLine($"Subtraction\n{newPoly}");
 
             var comparison = firstPolygon == secondPolygon;
             Console.WriteLine($"Equality {comparison}");

@@ -22,7 +22,7 @@ namespace ThirdTask
             }
             foreach (var animal in animals)
             {
-                Console.WriteLine($"Name: {animal.Name}, Age: {animal.Age}, Speed: {animal.Speed}, Count of paws {animal.CountOfPaw}, Gender: {animal.AnimalGender}");
+                Console.WriteLine($"Name: {animal.Name}, Age: {animal.Age}, Speed: {animal.Speed}, Count of paws {animal.PawCount}, Gender: {animal.Gender}");
             }
             Console.WriteLine("\nPress 'Y/y' to send animal for Extension, or any other character to exit ");
             var value = Console.ReadLine();

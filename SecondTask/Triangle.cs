@@ -111,11 +111,17 @@ namespace SecondTask
         /// <exception cref="ArgumentException">Object is not a Triangle</exception>
         public new int CompareTo(object obj)
         {
-            if (!(obj is Triangle))
+            // TODO: Before:
+            //if (!(obj is Triangle))
+            //    throw new ArgumentException("Object is not a Triangle");
+            //Triangle triangle = (Triangle)obj;
+            // TODO: After
+            if (obj is not Triangle triangle)
                 throw new ArgumentException("Object is not a Triangle");
-            Triangle triangle = (Triangle)obj;
+
             var firstTriangle = this.GetArea();
             var secondTriangle = triangle.GetArea();
+            // TODO: else not needed here
             if (firstTriangle > secondTriangle)
                 return 1;
             else if (secondTriangle > firstTriangle)

@@ -10,8 +10,8 @@ namespace ThirdTask
         {
             Name = name;
             Age = age;
-            CountOfPaw = 8;
-            AnimalGender = gender;
+            PawCount = 8;
+            Gender = gender;
             Speed = SpeedCheck(speed);
         }
 

@@ -11,59 +11,145 @@ namespace ThirdTask
         Female
     }
 
+    // TODO: Before
+    // TODO: compare structure of classes and properties in "Before" and "After"
     /// <summary>
     /// Class represents animal
     /// </summary>
+    //public abstract class Animal
+    //{
+    //    private int age;
+    //    private int speed;
+    //    public string Name { get; protected set; }
+    //    public int Age
+    //    {
+    //        get
+    //        {
+    //            return age;
+    //        }
+    //        protected set
+    //        {
+    //            if (value <= 0)
+    //            {
+    //                throw new ArgumentOutOfRangeException("Age can't be less then 0");
+    //            }
+    //            else
+    //            {
+    //                age = value;
+    //            }
+    //        }
+    //    }
+    //    public int PawCount { get; protected set; }
+    //    public Gender Gender { get; protected set; }
+    //    public int Speed
+    //    {
+    //        get
+    //        {
+    //            return speed;
+    //        }
+    //        protected set
+    //        {
+    //            if (value <= 0)
+    //            {
+    //                throw new ArgumentOutOfRangeException("Speed can't be less then 0");
+    //            }
+    //            else
+    //            {
+    //                speed = value;
+    //            }
+    //        }
+    //    }
+
+    //    /// <summary>
+    //    /// Сhecks the received speed for compliance with the limit
+    //    /// </summary>
+    //    /// <param name="speed">Received speed</param>
+    //    /// <returns>Returns speed</returns>
+    //    /// <exception cref="OverSpeedException">Over speed for animal</exception>
+    //    public abstract int SpeedCheck(int speed);
+    //}
+
+    // TODO: After
+    /// <summary>
+    /// Class represents animal.
+    /// </summary>
     public abstract class Animal
     {
-        private int age;
-        private int speed;
+        #region Fields
+
+        /// <summary>
+        /// Age
+        /// </summary>
+        private int _age;
+
+        /// <summary>
+        /// Maximum speed
+        /// </summary>
+        private int _speed;
+        #endregion
+
+        #region Properties
+
+        /// <summary>
+        /// Name
+        /// </summary>
         public string Name { get; protected set; }
+
+        /// <summary>
+        /// Count of paw
+        /// </summary>
+        public int PawCount { get; protected set; }
+
+        /// <summary>
+        /// Gender
+        /// </summary>
+        public Gender Gender { get; protected set; }
+
+        /// <summary>
+        /// Age
+        /// </summary>
         public int Age
         {
-            get
-            {
-                return age;
-            }
+            get => _age;
             protected set
             {
                 if (value <= 0)
                 {
-                    throw new ArgumentOutOfRangeException("Age can't be less then 0");
+                    throw new ArgumentOutOfRangeException(nameof(Age));
                 }
-                else
-                {
-                    age = value;
-                }
-            }
-        }
-        public int CountOfPaw { get; protected set; }
-        public Gender AnimalGender { get; protected set; }
-        public int Speed
-        {
-            get
-            {
-                return speed;
-            }
-            protected set
-            {
-                if (value <= 0)
-                {
-                    throw new ArgumentOutOfRangeException("Speed can't be less then 0");
-                }
-                else
-                {
-                    speed = value;
-                }
+
+                _age = value;
             }
         }
 
         /// <summary>
-        /// Сhecks the received speed for compliance with the limit
+        /// Maximum speed
+        /// </summary>
+        public int Speed
+        {
+            get => _speed;
+            protected set
+            {
+                if (value <= 0)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(Speed));
+                }
+
+                _speed = value;
+            }
+        }
+        #endregion
+
+        #region Public methods
+
+        /// <summary>
+        /// Сhecks the received speed for compliance with the limit.
         /// </summary>
         /// <param name="speed">Received speed</param>
         /// <returns>Returns speed</returns>
-        /// <exception cref="OverSpeedException">Over speed for animal</exception>
+        /// <exception cref="OverSpeedException">Thrown when animal tried to over speed</exception>
         public abstract int SpeedCheck(int speed);
+
+        #endregion
     }
 }

@@ -120,12 +120,20 @@ namespace SecondTask
         /// <exception cref="InvalidOperationException">Different count of sides.</exception>
         public static Polygon operator +(Polygon firstPolygon, Polygon secondPolygon)
         {
-            Polygon polygon = new Polygon(firstPolygon.Segments,firstPolygon.Id+secondPolygon.Id);
-            polygon.Segments = new Segment[firstPolygon.Segments.Length];
+            // TODO: Before
+            //Polygon polygon = new Polygon(firstPolygon.Segments, firstPolygon.Id + secondPolygon.Id);
+            //polygon.Segments = new Segment[firstPolygon.Segments.Length];
+            // TODO: After
+            Polygon polygon = new Polygon(firstPolygon.Segments, firstPolygon.Id + secondPolygon.Id)
+            {
+                Segments = new Segment[firstPolygon.Segments.Length]
+            };
+           
             if (firstPolygon.Segments.Length != secondPolygon.Segments.Length)
             {
                 throw new InvalidOperationException("Different count of sides.");
             }
+            // TODO: "else" don't need here and in similar places below
             else
             {
                 for (int i = 0; i < firstPolygon.Segments.Length; i++)
@@ -217,10 +225,13 @@ namespace SecondTask
                 {
                     if ((firstPolygon.Segments[i].FirstPoint != secondPolygon.Segments[i].FirstPoint) && (firstPolygon.Segments[i].SecondPoint != secondPolygon.Segments[i].SecondPoint))
                     {
+                        // TODO: here could be break;
+                        // TODO: if at least 1 point is not the same we could say that Polygon-s are not equals
                         counter++;
                     }
                     else
                     {
+
                         continue;
                     }
                 }
@@ -241,7 +252,11 @@ namespace SecondTask
         /// <param name="segments">Array of segments</param>
         public static implicit operator Polygon(Segment[] segments)
         {
-            return new Polygon(segments, 4);
+            // TODO: it will create same Polygons
+            //return new Polygon(segments, 4);
+            // TODO: Changed:
+            var rnd = new Random();
+            return new Polygon(segments, rnd.Next());
         }
 
         /// <summary>

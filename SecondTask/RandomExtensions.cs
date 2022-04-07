@@ -5,7 +5,9 @@ namespace SecondTask
     /// <summary>
     /// Provides an extension method for the Random class
     /// </summary>
-    public static class RandomExtension
+    /// TODO: renamed from RandomExtension to RandomExtensions
+    /// TODO: Here could be more extensions in future.
+    public static class RandomExtensions
     {
         /// <summary>
         /// Generates random coordinates
